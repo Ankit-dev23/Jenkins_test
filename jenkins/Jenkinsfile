@@ -1,22 +1,7 @@
-pipeline {
-  agent {
-    kubernetes {
-      inheritFrom 'Kube_jenkins_agent'
-      yaml '''
-      spec:
-        containers:
-        - name: maven
-          image: maven:3.9.9-eclipse-temurin-21
-'''
-      …
-    }
-  }
-  stages {
-    stage ("print name"){
-        steps{
+podTemplate(containers: [containerTemplate(image: 'docker', name: 'docker', command: 'sleep', args: '99d')]) {
+    podTemplate(containers: [containerTemplate(image: 'maven', name: 'maven', command: 'sleep', args: '99d')]) {
+      node("kubepods") { // gets a pod with both docker and maven
         sh "echo hello"
-        
-        }
+      }
     }
-  }
 }
