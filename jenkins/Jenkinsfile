@@ -1,20 +1,22 @@
 pipeline {
-    agent any 
-    stages {
-        stage('Build') { 
-            steps {
-                echo "This is Build stage 1."
-            }
-        }
-        stage('Test') { 
-            steps {
-                echo "This is Test stage 1." 
-            }
-        }
-        stage('Deploy') { 
-            steps {
-                echo "This is Deploy stage." 
-            }
+  agent {
+    kubernetes {
+      inheritFrom 'Kube_jenkins_agent'
+      yaml '''
+      spec:
+        containers:
+        - name: maven
+          image: maven:3.9.9-eclipse-temurin-21
+'''
+      …
+    }
+  }
+  stages {
+    stage ("print name"){
+        steps{
+        sh "echo hello"
+        
         }
     }
+  }
 }
